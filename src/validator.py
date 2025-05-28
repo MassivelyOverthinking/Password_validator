@@ -1,5 +1,10 @@
-from rules import UppercaseRule, MinLengthRule, MaxLengthRule, MostCommonPasswordsRule, MustIncludeCharRule, NumbersRule, NoSpacesRule, SymbolsRule
+#-------------------- Imports --------------------
+
+from rules import *
 from mode import Mode
+
+#-------------------- PasswordValidator Object --------------------
+
 
 class PasswordValidator:
     def __init__(

@@ -24,6 +24,10 @@ dist/
 *.log
 *.tmp
 
+# Test
+tests/
+test_*
+
 # Sensitive data
 .env
 config.yaml
