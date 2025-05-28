@@ -1,7 +1,7 @@
 from rules import UppercaseRule, MinLengthRule, MaxLengthRule, MostCommonPasswordsRule, MustIncludeCharRule, NumbersRule, NoSpacesRule, SymbolsRule
 from mode import Mode
 
-class password_validator:
+class PasswordValidator:
     def __init__(
         self,
         min_length=None,
@@ -71,5 +71,8 @@ class password_validator:
             self.rules.append(MostCommonPasswordsRule())
 
     def validate(self, password: str = None):
-        errors = [rule.message() for rule in self.rules if not rule.validate(password)]
+        errors = [
+            {"code": rule.code, "message": rule.message()}
+            for rule in self.rules if not rule.validate(password)
+        ]
         return len(errors) == 0, errors

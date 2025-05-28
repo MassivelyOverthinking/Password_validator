@@ -17,6 +17,8 @@ def get_passwords_list():
 
 
 class BaseRule(ABC):
+    code: str = "base_rule"
+
     @abstractmethod
     def validate(self, password: str) -> bool:
         """
@@ -39,6 +41,7 @@ class BaseRule(ABC):
 class MinLengthRule(BaseRule):
     min_length: int = 8
     _message: str = None
+    code: str = "min_length"
 
     def validate(self, password: str) -> bool:
         return len(password) >= self.min_length
@@ -51,6 +54,7 @@ class MinLengthRule(BaseRule):
 class MaxLengthRule(BaseRule):
     max_length: int = 65
     _message: str = None
+    code: str = "max_length"
 
     def validate(self, password: str) -> bool:
         return len(password) <= self.max_length
@@ -62,6 +66,7 @@ class MaxLengthRule(BaseRule):
 @dataclass
 class UppercaseRule(BaseRule):
     _message: str = None
+    code: str = "uppercase_required"
 
     def validate(self, password: str) -> bool:
         return any(c.isupper() for c in password)
@@ -73,6 +78,7 @@ class UppercaseRule(BaseRule):
 @dataclass
 class NumbersRule(BaseRule):
     _message: str = None
+    code: str = "digit_required"
 
     def validate(self, password: str) -> bool:
         return any(c.isdigit() for c in password)
@@ -84,6 +90,7 @@ class NumbersRule(BaseRule):
 @dataclass
 class SymbolsRule(BaseRule):
     _message: str = None
+    code: str = "symbol_required"
 
     def validate(self, password: str) -> bool:
         return bool(re.search(r"[!\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]", password))
@@ -95,6 +102,7 @@ class SymbolsRule(BaseRule):
 @dataclass
 class NoSpacesRule(BaseRule):
     _message: str = None
+    code: str = "no_space_allowed"
 
     def validate(self, password: str) -> bool:
         return not bool(re.search(r"\s", password))
@@ -107,6 +115,7 @@ class NoSpacesRule(BaseRule):
 class MustIncludeCharRule(BaseRule):
     character: str = None
     _message: str = None
+    code: str = "must_include_character"
 
     def validate(self, password: str) -> bool:
         return True if self.character in password else False
@@ -118,6 +127,7 @@ class MustIncludeCharRule(BaseRule):
 @dataclass
 class MostCommonPasswordsRule(BaseRule):
     _message: str = None
+    code: str = "common_password"
 
     def validate(self, password: str) -> bool:
         return password not in get_passwords_list()
