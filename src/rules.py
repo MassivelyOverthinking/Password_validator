@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from functools import lru_cache
+from dataclasses import dataclass
 
 import re
 
@@ -34,10 +35,10 @@ class BaseRule(ABC):
         return self.message()
     
 
+@dataclass
 class MinLengthRule(BaseRule):
-    def __init__(self, min_length: int = 8, message: str = None):
-        self.min_length = min_length
-        self._message = message
+    min_length: int = 8
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return len(password) >= self.min_length
@@ -46,10 +47,10 @@ class MinLengthRule(BaseRule):
         return self._message or f"Password must be at least {self.min_length} characters long"
 
 
+@dataclass
 class MaxLengthRule(BaseRule):
-    def __init__(self, max_length: int = 65, message: str = None):
-        self.max_length = max_length
-        self._message = message
+    max_length: int = 65
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return len(password) <= self.max_length
@@ -58,9 +59,9 @@ class MaxLengthRule(BaseRule):
         return self._message or f"Passwords must be under {self.max_length} characters long"
 
 
+@dataclass
 class UppercaseRule(BaseRule):
-    def __init__(self, message: str = None):
-        self._message = message
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return any(c.isupper() for c in password)
@@ -69,9 +70,9 @@ class UppercaseRule(BaseRule):
         return self._message or "Password must include at least one uppercase character"
 
 
+@dataclass
 class NumbersRule(BaseRule):
-    def __init__(self, message: str = None):
-        self._message = message
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return any(c.isdigit() for c in password)
@@ -80,9 +81,9 @@ class NumbersRule(BaseRule):
         return self._message or "Password must include at least one digit (0 - 9)"
 
 
+@dataclass
 class SymbolsRule(BaseRule):
-    def __init__(self, message: str = None):
-        self._message = message
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return bool(re.search(r"[!\"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]", password))
@@ -91,9 +92,9 @@ class SymbolsRule(BaseRule):
         return self._message or "Password must include at least one special character/symbol"
 
 
+@dataclass
 class NoSpacesRule(BaseRule):
-    def __init__(self, message: str = None):
-        self._message = message
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return not bool(re.search(r"\s", password))
@@ -102,10 +103,10 @@ class NoSpacesRule(BaseRule):
         return self._message or "Password must not include spaces"
     
 
+@dataclass
 class MustIncludeCharRule(BaseRule):
-    def __init__(self, character: str = None, message: str = None):
-        self.character = character
-        self._message = message
+    character: str = None
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return True if self.character in password else False
@@ -114,9 +115,9 @@ class MustIncludeCharRule(BaseRule):
         return self._message or f"Password must include the specified character: {self.character}"
     
 
+@dataclass
 class MostCommonPasswordsRule(BaseRule):
-    def __init__(self, message: str = None):
-        self._message = message
+    _message: str = None
 
     def validate(self, password: str) -> bool:
         return password not in get_passwords_list()
