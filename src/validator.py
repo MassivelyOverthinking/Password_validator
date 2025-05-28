@@ -2,6 +2,7 @@
 
 from rules import *
 from mode import Mode
+from typing import Optional, Tuple, List, Dict
 
 #-------------------- PasswordValidator Object --------------------
 
@@ -9,15 +10,16 @@ from mode import Mode
 class PasswordValidator:
     def __init__(
         self,
-        min_length=None,
-        max_length=None,
-        require_uppercase=False,
-        require_numbers=False,
-        require_symbols=False,
-        no_spaces=False,
-        must_include_char=None,
-        not_common=False,
-        mode=None
+        min_length: int = None,
+        max_length: int = None,
+        require_uppercase: bool = False,
+        require_numbers: bool = False,
+        require_symbols: bool = False,
+        no_spaces: bool = False,
+        must_include_char: str = None,
+        no_repeating_chars: int = None,
+        not_common: bool = False,
+        mode: Optional[Mode] = None
     ):
         self.rules = []
 
@@ -29,6 +31,7 @@ class PasswordValidator:
             require_symbols = False
             no_spaces = False
             must_include_char = None
+            no_repeating_chars = None
             not_common = False
 
         elif mode == Mode.moderate:
@@ -39,6 +42,7 @@ class PasswordValidator:
             require_symbols = False
             no_spaces = True
             must_include_char = None
+            no_repeating_chars = 4
             not_common = False
             
         elif mode == Mode.strict:
@@ -49,6 +53,7 @@ class PasswordValidator:
             require_symbols = True
             no_spaces = True
             must_include_char = None
+            no_repeating_chars = 3
             not_common = True
 
         if min_length is not None:
@@ -72,10 +77,13 @@ class PasswordValidator:
         if must_include_char is not None:
             self.rules.append(MustIncludeCharRule(character=must_include_char))
 
+        if no_repeating_chars is not None:
+            self.rules.append(NoRepeatingCharsRule(repeating_limit=no_repeating_chars))
+
         if not_common:
             self.rules.append(MostCommonPasswordsRule())
 
-    def validate(self, password: str = None):
+    def validate(self, password: str = None) -> Tuple[bool, List[Dict[str, str]]]:
         errors = [
             {"code": rule.code, "message": rule.message()}
             for rule in self.rules if not rule.validate(password)

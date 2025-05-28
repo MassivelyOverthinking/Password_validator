@@ -9,7 +9,7 @@ import re
 #-------------------- Common Passwords --------------------
 
 @lru_cache(maxsize=1)
-def get_passwords_list():
+def get_passwords_list() -> set[str]:
     with open("common_passwords.txt") as f:
         return set(f.read().split())
 
@@ -122,6 +122,33 @@ class MustIncludeCharRule(BaseRule):
     
     def message(self):
         return self._message or f"Password must include the specified character: {self.character}"
+    
+
+@dataclass
+class NoRepeatingCharsRule(BaseRule):
+    repeating_limit: int = 3
+    _message: str = None
+    code: str = "no_repeating_chars"
+
+    def validate(self, password: str) -> bool:
+        if not password:
+            return True
+        
+        count = 1
+
+        for i in range(1, len(password)):
+            if password[i] == password[i - 1]:
+                count += 1
+                if count >= self.repeating_limit:
+                    return False
+            else:
+                count = 1
+        
+        return True
+
+    
+    def message(self):
+        return self._message or f"Password must not include more than {self.repeating_limit} repeating characters"
     
 
 @dataclass

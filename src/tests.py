@@ -13,7 +13,7 @@ validator = PasswordValidator(
     )
 
 common_validator = PasswordValidator(
-    not_common=True
+    not_common=True,
 )
 
 test_password1 = "MegaSecret10+"
