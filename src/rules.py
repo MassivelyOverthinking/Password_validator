@@ -1,10 +1,19 @@
 #-------------------- Imports --------------------
 
 from abc import ABC, abstractmethod
+from functools import lru_cache
 
 import re
 
+#-------------------- Common Passwords --------------------
+
+@lru_cache(maxsize=1)
+def get_passwords_list():
+    with open("common_passwords.txt") as f:
+        return set(f.read().split())
+
 #-------------------- Validator Rules --------------------
+
 
 class BaseRule(ABC):
     @abstractmethod
@@ -91,3 +100,26 @@ class NoSpacesRule(BaseRule):
     
     def message(self):
         return self._message or "Password must not include spaces"
+    
+
+class MustIncludeCharRule(BaseRule):
+    def __init__(self, character: str = None, message: str = None):
+        self.character = character
+        self._message = message
+
+    def validate(self, password: str) -> bool:
+        return True if self.character in password else False
+    
+    def message(self):
+        return self._message or f"Password must include the specified character: {self.character}"
+    
+
+class MostCommonPasswordsRule(BaseRule):
+    def __init__(self, message: str = None):
+        self._message = message
+
+    def validate(self, password: str) -> bool:
+        return password not in get_passwords_list()
+    
+    def message(self):
+        return self._message or "Password is too common and easy to guess"
