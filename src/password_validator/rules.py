@@ -9,21 +9,23 @@ import re
 
 #-------------------- Common Passwords & Blacklist --------------------
 
-PACKAGE_NAME = "password_validator"
+PACKAGE_NAME = "password_validator.data"
 
 @lru_cache(maxsize=1)
 def get_passwords_list() -> set[str]:
     try:
-        data = files(f"{PACKAGE_NAME}.data").joinpath("common_passwords.txt").read_text(encoding='utf-8')
-        return set(word.lower() for word in data.split())
+        data_path = files(PACKAGE_NAME).joinpath("common_passwords.txt")
+        data = data_path.read_text(encoding='utf-8')
+        return set(word.lower() for word in data.splitlines())
     except FileNotFoundError as err:
         return set()
     
 @lru_cache(maxsize=1)
 def get_blacklist() -> set[str]:
     try:
-        data = files(f"{PACKAGE_NAME}.data").joinpath("blacklist.txt").read_text(encoding='utf-8')
-        return set(word.lower() for word in data.split())
+        data_path = files(PACKAGE_NAME).joinpath("blacklist.txt")
+        data = data_path.read_text(encoding='utf-8')
+        return set(word.lower() for word in data.splitlines())
     except FileNotFoundError as err:
         return set()
 
