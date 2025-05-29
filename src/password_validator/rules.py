@@ -6,7 +6,6 @@ from importlib.resources import files
 from dataclasses import dataclass
 
 import re
-import os
 
 #-------------------- Common Passwords & Blacklist --------------------
 
@@ -15,8 +14,8 @@ PACKAGE_NAME = "password_validator"
 @lru_cache(maxsize=1)
 def get_passwords_list() -> set[str]:
     try:
-        data = files(f"{PACKAGE_NAME}.data").joinpath("common_passswords.txt").read_text(encoding='utf-8')
-        return set(data.split())
+        data = files(f"{PACKAGE_NAME}.data").joinpath("common_passwords.txt").read_text(encoding='utf-8')
+        return set(word.lower() for word in data.split())
     except FileNotFoundError as err:
         return set()
     
@@ -24,7 +23,7 @@ def get_passwords_list() -> set[str]:
 def get_blacklist() -> set[str]:
     try:
         data = files(f"{PACKAGE_NAME}.data").joinpath("blacklist.txt").read_text(encoding='utf-8')
-        return set(data.split())
+        return set(word.lower() for word in data.split())
     except FileNotFoundError as err:
         return set()
 
