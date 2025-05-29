@@ -18,6 +18,7 @@ class PasswordValidator:
         no_spaces: bool = False,
         must_include_char: str = None,
         no_repeating_chars: int = None,
+        blacklisted_pattern: bool = False,
         not_common: bool = False,
         mode: Optional[Mode] = None
     ):
@@ -32,6 +33,7 @@ class PasswordValidator:
             no_spaces = False
             must_include_char = None
             no_repeating_chars = None
+            blacklisted_pattern = False
             not_common = False
 
         elif mode == Mode.moderate:
@@ -43,6 +45,7 @@ class PasswordValidator:
             no_spaces = True
             must_include_char = None
             no_repeating_chars = 4
+            blacklisted_pattern = False
             not_common = False
             
         elif mode == Mode.strict:
@@ -54,6 +57,7 @@ class PasswordValidator:
             no_spaces = True
             must_include_char = None
             no_repeating_chars = 3
+            blacklisted_pattern = True
             not_common = True
 
         if min_length is not None:
@@ -79,6 +83,9 @@ class PasswordValidator:
 
         if no_repeating_chars is not None:
             self.rules.append(NoRepeatingCharsRule(repeating_limit=no_repeating_chars))
+
+        if blacklisted_pattern:
+            self.rules.append(BlacklistRule())
 
         if not_common:
             self.rules.append(MostCommonPasswordsRule())
