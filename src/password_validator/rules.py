@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 from functools import lru_cache
+from importlib.resources import files
 from dataclasses import dataclass
 
 import re
@@ -9,19 +10,23 @@ import os
 
 #-------------------- Common Passwords & Blacklist --------------------
 
+PACKAGE_NAME = "password_validator"
+
 @lru_cache(maxsize=1)
 def get_passwords_list() -> set[str]:
-    if not os.path.exists("common_passwords.txt"):
+    try:
+        data = files(f"{PACKAGE_NAME}.data").joinpath("common_passswords.txt").read_text(encoding='utf-8')
+        return set(data.split())
+    except FileNotFoundError as err:
         return set()
-    with open("common_passwords.txt") as f:
-        return set(f.read().split())
     
 @lru_cache(maxsize=1)
 def get_blacklist() -> set[str]:
-    if not os.path.exists("blacklist.txt"):
+    try:
+        data = files(f"{PACKAGE_NAME}.data").joinpath("blacklist.txt").read_text(encoding='utf-8')
+        return set(data.split())
+    except FileNotFoundError as err:
         return set()
-    with open("blacklist.txt") as f:
-        return set(f.read().split())
 
 #-------------------- Validator Rules --------------------
 

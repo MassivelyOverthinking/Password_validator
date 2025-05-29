@@ -1,6 +1,6 @@
 #-------------------- Package Management --------------------
 
-__all__ = ["exceptions", "rules", "mode"]
+__all__ = ["rules", "mode", "validator", "data"]
 __version__ = "0.0.1"
-__author__ = "Steve Rogers"
+__author__ = "MassivelyOverthinking"
 
