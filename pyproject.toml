@@ -9,7 +9,7 @@ description = "A dynamic password validation system with preconfigured modes and
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
 authors = [
-    {name = "MassivelyOverthinking", email = "STcena1@hotmail.com"}
+    {name = "HysingerDev", email = "HysingerDev@gmail.com"}
 ]
 requires-python = ">=3.8"
 keywords = [
