@@ -1,7 +1,7 @@
 include LICENSE
 include README.md
 
-recursive-include src/password_validator/data *
+recursive-include src/advanced_password_validator/data *
 
 recursive-include Tests *.py
 

@@ -9,7 +9,7 @@ import re
 
 #-------------------- Common Passwords & Blacklist --------------------
 
-PACKAGE_NAME = "password_validator.data"
+PACKAGE_NAME = "advanced_password_validator.data"
 
 @lru_cache(maxsize=1)
 def get_passwords_list() -> set[str]:
