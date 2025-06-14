@@ -3,11 +3,74 @@
 from rules import *
 from mode import Mode
 from typing import Optional, Tuple, List, Dict
+from typeguard import typechecked
 
 #-------------------- PasswordValidator Object --------------------
 
-
+@typechecked
 class PasswordValidator:
+    """
+    A flexible and configurable password validator that applies a set of rules
+    to check whether a given password meets the defined security criteria.
+
+    The validator can be customized by manually specifying individual rules
+    or by selecting a predefined mode (lenient, moderate, or strict).
+
+    Parameters:
+    -----------
+    min_length : int, optional
+        Minimum length required for the password. Default is None.
+        
+    max_length : int, optional
+        Maximum length allowed for the password. Default is None.
+        
+    require_uppercase : bool, optional
+        If True, the password must contain at least one uppercase letter. Default is False.
+        
+    require_numbers : bool, optional
+        If True, the password must contain at least one numeric character. Default is False.
+        
+    require_symbols : bool, optional
+        If True, the password must contain at least one special symbol. Default is False.
+        
+    no_spaces : bool, optional
+        If True, spaces are not allowed in the password. Default is False.
+        
+    must_include_char : str, optional
+        If provided, the password must contain this specific character. Default is None.
+        
+    no_repeating_chars : int, optional
+        Maximum number of allowed consecutive repeating characters. For example,
+        if set to 3, "aaa" is valid but "aaaa" is not. Default is None.
+        
+    blacklisted_pattern : bool, optional
+        If True, the password will be checked against a list of blacklisted patterns.
+        Default is False.
+        
+    not_common : bool, optional
+        If True, the password must not be one of the most common passwords.
+        Default is False.
+        
+    mode : Mode, optional
+        Optional predefined configuration that sets multiple rule parameters at once.
+        Available modes:
+            - Mode.lenient: Basic length check (8-65 chars), minimal constraints.
+            - Mode.moderate: Includes uppercase, numbers, no spaces, limited repetition.
+            - Mode.strict: Enforces symbols, blacklist, common password avoidance, and stricter repetition limits.
+
+    Methods:
+    --------
+    validate(password: str) -> Tuple[bool, List[Dict[str, str]]]
+        Validates the given password against all configured rules.
+        
+        Returns:
+            A tuple:
+            - A boolean indicating whether the password is valid.
+            - A list of dictionaries, each containing:
+                - "code": The error code of the failed rule.
+                - "message": A human-readable description of the error.
+    
+    """
     def __init__(
         self,
         min_length: int = None,
@@ -22,6 +85,7 @@ class PasswordValidator:
         not_common: bool = False,
         mode: Optional[Mode] = None
     ):
+        
         self.rules = []
 
         if mode == Mode.lenient:
