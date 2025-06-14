@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "advanced_password_validator"
-version = "0.1.0"
+version = "1.0.1"
 description = "A dynamic password validation system with preconfigured modes and rule-based design"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
